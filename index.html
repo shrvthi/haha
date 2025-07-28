@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vizag to Delhi Plane Quest - Valentine Edition</title>
+  <style>
+    body {
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      overflow: hidden;
+      color: #880e4f;
+    }
+    h1 {
+      margin-top: 20px;
+      font-weight: 900;
+      font-size: 2.4rem;
+      text-shadow: 2px 2px 5px #ad1457;
+    }
+    #description {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: #4a148c;
+      font-weight: 600;
+    }
+    #flyBtn {
+      padding: 14px 28px;
+      font-size: 1.3rem;
+      background: #d81b60;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 8px #ad1457;
+      transition: background 0.3s ease;
+    }
+    #flyBtn:hover {
+      background: #ad1457;
+    }
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background: linear-gradient(to top, #fce4ec, #f8bbd0);
+      border: 4px solid #880e4f;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #d81b60;
+    }
+    #message {
+      display: none;
+      margin-top: 40px;
+      font-size: 3rem;
+      font-weight: 900;
+      color: #b71c1c;
+      text-shadow:
+         2px 2px 3px #880e4f,
+         4px 4px 10px #f48fb1;
+      user-select: none;
+    }
+    .heart, .kiss {
+      position: fixed;
+      font-size: 3.5rem;
+      animation: floatUp 5s ease-in-out forwards;
+      pointer-events: none;
+      text-shadow:
+        0 0 5px #d81b60,
+        0 0 10px #f48fb1;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 2px #880e4f);
+      transform-style: preserve-3d;
+      will-change: transform, opacity;
+      perspective: 1000px;
+    }
+    .heart { color: #e91e63; }
+    .kiss { color: #f48fb1; }
+
+    @keyframes floatUp {
+      0% {
+        transform: translate3d(var(--x), 100vh, 0) rotateY(0deg) scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: translate3d(calc(var(--x) + 10px), 50vh, 0) rotateY(180deg) scale(1.2);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translate3d(calc(var(--x) + 20px), -20vh, 0) rotateY(360deg) scale(1);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Help the plane reach from Vizag to Delhi!</h1>
+  <div id="description">Click the button below repeatedly to fly forward and reach Delhi!</div>
+  <button id="flyBtn">Fly Plane 🛫</button>
+  <canvas id="game" width="600" height="200"></canvas>
+
+  <div id="message">I miss you chittiluuu 😭😭🥺🥺🥹🥹</div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const flyBtn = document.getElementById('flyBtn');
+    const message = document.getElementById('message');
+    let planeX = 20;
+    let planeY = 90;
+    let won = false;
+
+    function drawPlane() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#e91e63';
+      ctx.fillRect(planeX, planeY, 60, 20);
+      ctx.fillStyle = '#ad1457';
+      ctx.fillRect(planeX + 50, planeY - 10, 20, 40);
+    }
+
+    function movePlane() {
+      if (won) return;
+      planeX += 20;
+      drawPlane();
+
+      if (planeX + 70 >= canvas.width) {
+        won = true;
+        showMessage();
+      }
+    }
+
+    function showMessage() {
+      flyBtn.style.display = 'none';
+      message.style.display = 'block';
+      createFlyingEmojis();
+    }
+
+    function createFlyingEmojis() {
+      for (let i = 0; i < 60; i++) {
+        const emoji = document.createElement('div');
+        emoji.className = Math.random() > 0.5 ? 'heart' : 'kiss';
+        emoji.textContent = emoji.classList.contains('heart') ? '❤️' : '💋';
+        emoji.style.setProperty('--x', Math.random() * 100 + 'vw');
+        emoji.style.left = Math.random() * 100 + 'vw';
+        emoji.style.top = '100vh';
+        emoji.style.animationDelay = (Math.random() * 5) + 's';
+        emoji.style.animationDuration = (4 + Math.random() * 3) + 's';
+        document.body.appendChild(emoji);
+        setTimeout(() => {
+          emoji.remove();
+        }, 9000);
+      }
+    }
+
+    flyBtn.addEventListener('click', () => {
+      movePlane();
+    });
+
+    drawPlane();
+  </script>
+
+</body>
+</html>
